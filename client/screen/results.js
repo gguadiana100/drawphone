@@ -85,41 +85,41 @@ class Results extends Screen {
         results.append(wentFromBox);
     }
 
-    displayOtherChainButtons(chainsToList, { id }) {
-        const others = $("#result-others");
-        others.empty();
-
-        if (chainsToList.length > 1) {
-            others.append("<h4>View more results:</h4>");
-        }
-
-        for (let i = 0; i < chainsToList.length; i++) {
-            const chain = chainsToList[i];
-
-            const disabled = chain.id === id ? "disabled" : "";
-
-            // "players write first word" chains have the first word at index 1.
-            const buttonLabel = chain.links[0].data || chain.links[1].data;
-
-            const button = $(
-                `<button type="button"${disabled}>${
-                    i + 1
-                }. ${buttonLabel}</button>`
-            );
-            button.addClass("btn btn-default btn-lg");
-            ((thisChain, chainList) => {
-                button.click(() => {
-                    this.render(thisChain, chainList);
-
-                    //jump to top of the page
-                    window.scrollTo(0, 0);
-
-                    ga("send", "event", "Results", "display another chain");
-                });
-            })(chain, chainsToList);
-            others.append(button);
-        }
-    }
+    // displayOtherChainButtons(chainsToList, { id }) {
+    //     const others = $("#result-others");
+    //     others.empty();
+    //
+    //     if (chainsToList.length > 1) {
+    //         others.append("<h4>View more results:</h4>");
+    //     }
+    //
+    //     for (let i = 0; i < chainsToList.length; i++) {
+    //         const chain = chainsToList[i];
+    //
+    //         const disabled = chain.id === id ? "disabled" : "";
+    //
+    //         // "players write first word" chains have the first word at index 1.
+    //         const buttonLabel = chain.links[0].data || chain.links[1].data;
+    //
+    //         const button = $(
+    //             `<button type="button"${disabled}>${
+    //                 i + 1
+    //             }. ${buttonLabel}</button>`
+    //         );
+    //         button.addClass("btn btn-default btn-lg");
+    //         ((thisChain, chainList) => {
+    //             button.click(() => {
+    //                 this.render(thisChain, chainList);
+    //
+    //                 //jump to top of the page
+    //                 window.scrollTo(0, 0);
+    //
+    //                 ga("send", "event", "Results", "display another chain");
+    //             });
+    //         })(chain, chainsToList);
+    //         others.append(button);
+    //     }
+    // }
 }
 
 export default Results;

@@ -85,41 +85,69 @@ class Results extends Screen {
         results.append(wentFromBox);
     }
 
-    // displayOtherChainButtons(chainsToList, { id }) {
-    //     const others = $("#result-others");
-    //     others.empty();
-    //
-    //     if (chainsToList.length > 1) {
-    //         others.append("<h4>View more results:</h4>");
-    //     }
-    //
-    //     for (let i = 0; i < chainsToList.length; i++) {
-    //         const chain = chainsToList[i];
-    //
-    //         const disabled = chain.id === id ? "disabled" : "";
-    //
-    //         // "players write first word" chains have the first word at index 1.
-    //         const buttonLabel = chain.links[0].data || chain.links[1].data;
-    //
-    //         const button = $(
-    //             `<button type="button"${disabled}>${
-    //                 i + 1
-    //             }. ${buttonLabel}</button>`
-    //         );
-    //         button.addClass("btn btn-default btn-lg");
-    //         ((thisChain, chainList) => {
-    //             button.click(() => {
-    //                 this.render(thisChain, chainList);
-    //
-    //                 //jump to top of the page
-    //                 window.scrollTo(0, 0);
-    //
-    //                 ga("send", "event", "Results", "display another chain");
-    //             });
-    //         })(chain, chainsToList);
-    //         others.append(button);
-    //     }
-    // }
+    displayOtherChainButtons(chainsToList, { id }) {
+        const others = $("#result-others");
+        others.empty();
+
+        if (chainsToList.length > 1) {
+            others.append("<h4>View more results:</h4>");
+        }
+
+        for (let i = 0; i < chainsToList.length; i++) { // for each chain of results, make buttons and html objects
+            const chain = chainsToList[i];
+
+            const disabled = chain.id === id ? "disabled" : "";
+
+            // "players write first word" chains have the first word at index 1.
+            const buttonLabel = chain.links[0].data || chain.links[1].data;
+
+            const button = $(
+                `<button type="button"${disabled}>${
+                    i + 1
+                }. ${buttonLabel}</button>`
+            );
+            button.addClass("btn btn-default btn-lg");
+            ((thisChain, chainList) => {
+                button.click(() => {
+                    var chain_name = "chain"+id;
+                    var canvas_name = 'canvas'+chain_name;
+                    var image_name = 'image'+'chain_name';
+                    eval('var '+ canvas_name + '= this.render(thisChain, chainList);') // render chain to screen
+                    console.log(chain_name)
+                    this.render(thisChain, chainList);
+                    downloadCanvasAsImage(canvas_name, image_name)
+                    // console.log(thisChain);
+                    // console.log(chainList);
+
+                    //jump to top of the page
+                    window.scrollTo(0, 0);
+
+                    ga("send", "event", "Results", "display another chain");
+                });
+            })(chain, chainsToList);
+            others.append(button);
+        }
+    }
+}
+
+function downloadCanvasAsImage(canvas_name, image_name){ // use to get NFT images from output
+    // from https://stackoverflow.com/questions/8126623/downloading-canvas-element-to-an-image
+    let canvasImage = document.getElementsByName(canvas_name).toDataURL('image/png');
+
+    // this can be used to download any image from webpage to local disk
+    let xhr = new XMLHttpRequest();
+    xhr.responseType = 'blob';
+    xhr.onload = function () {
+        let a = document.createElement('a');
+        a.href = window.URL.createObjectURL(xhr.response);
+        a.download = image_name+'.jpeg';
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      };
+      xhr.open('GET', canvasImage); // This is to download the canvas Image
+      xhr.send();
 }
 
 export default Results;

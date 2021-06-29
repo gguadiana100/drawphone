@@ -1,6 +1,7 @@
 import { addResultsToStorage } from "../archive.js";
 import { DRAWING, WORD, FIRST_WORD } from "../../shared/enums.js";
 import Screen from "./screen.js";
+import domtoimage from 'dom-to-image';
 
 /* global $, ga */
 
@@ -37,6 +38,11 @@ class Results extends Screen {
         if (!isArchivePage && !data.isViewPreviousResults) {
             addResultsToStorage(chains);
         }
+
+        // download images of outputs
+        console.log("we here");
+        // this.downloadAsJpeg(document.body);
+        console.log("we over there");
     }
 
     render(chainToShow, allChains) {
@@ -119,6 +125,16 @@ class Results extends Screen {
             })(chain, chainsToList);
             others.append(button);
         }
+    }
+
+    downloadAsJpeg(objectDOM){
+      domtoimage.toJpeg(objectDOM, { quality: 1 }).then(function (dataUrl) {
+        var link = document.createElement('a');
+        link.download = 'my-image-name.jpeg';
+        link.href = dataUrl;
+        link.click();
+        // link.remove();
+      });
     }
 }
 

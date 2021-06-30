@@ -1,9 +1,7 @@
 {
     "name": "drawphone",
     "version": "1.0.0",
-    "engines": {
-        "node": "14.17.1"
-    },
+    "engines": {"node": "14.17.1", "npm": "6.14.13"},
     "description": "Telephone with pictures",
     "private": true,
     "scripts": {

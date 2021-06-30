@@ -63,4 +63,3 @@ typings/
 # Credentials
 .travis/*.key
 .travis/*.key.pub
-Procfile
